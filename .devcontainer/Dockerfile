@@ -4,9 +4,9 @@ ARG VARIANT="24"
 FROM mcr.microsoft.com/devcontainers/javascript-node:${VARIANT}
 
 # Add package info for cf CLI
-RUN wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key \
-  | gpg --dearmor -o /usr/share/keyrings/cli.cloudfoundry.org.gpg \
-  && echo "deb [signed-by=/usr/share/keyrings/cli.cloudfoundry.org.gpg] https://packages.cloudfoundry.org/debian stable main" \
+# The upstream signing key expired 2020-09-12 and has not been rotated, so this
+# repo is marked trusted (skips signature verification) rather than using signed-by.
+RUN echo "deb [trusted=yes] https://packages.cloudfoundry.org/debian stable main" \
   | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
 
 # Install some generally useful tools, including cf CLI
